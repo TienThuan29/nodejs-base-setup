@@ -1,0 +1,17 @@
+{
+  "name": "DevContainer with latest Node.js, MongoDB, Redis",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "bash"
+  },
+  "extensions": [
+    "dbaeumer.vscode-eslint",
+    "mongodb.mongodb-vscode",
+    "ms-azuretools.vscode-docker",
+    "ms-redis.redis"
+  ],
+  "postCreateCommand": "npm install",
+  "remoteUser": "vscode"
+}
