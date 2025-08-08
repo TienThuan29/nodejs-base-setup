@@ -1,6 +1,7 @@
 import { Request } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
 
+// Extend Resquest class to replace the default Request type
 export interface AuthRequest extends Request {
   user?: {
     id: string;
@@ -15,13 +16,13 @@ export interface LoginCredentials {
 }
 
 export interface RegisterData {
-  name: string;
+  fullname: string;
   email: string;
   password: string;
 }
 
 export interface JWTPayload extends JwtPayload {
-  userId: string;
+  id: string;
   email: string;
   role: string;
 }
@@ -29,7 +30,7 @@ export interface JWTPayload extends JwtPayload {
 export interface AuthResponse {
   user: {
     id: string;
-    name: string;
+    fullname: string;
     email: string;
     role: string;
   };

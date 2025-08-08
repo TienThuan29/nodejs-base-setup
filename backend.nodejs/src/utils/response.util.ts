@@ -1,9 +1,10 @@
 import { Response } from 'express';
+import { config } from '@/configs/config';
 
 export interface ApiResponse<T = any> {
   success: boolean;
   message: string;
-  data?: T;
+  dataResponse?: T;
   error?: string;
   stack?: string;
 }
@@ -11,14 +12,14 @@ export interface ApiResponse<T = any> {
 export class ResponseUtil {
   static success<T>(
     res: Response, 
-    data: T, 
+    dataResponse: T, 
     message: string = 'Success', 
     statusCode: number = 200
   ): Response<ApiResponse<T>> {
     return res.status(statusCode).json({
       success: true,
       message,
-      data,
+      dataResponse,
     });
   }
 
@@ -35,7 +36,7 @@ export class ResponseUtil {
     };
 
     if (error) response.error = error;
-    if (stack && process.env.NODE_ENV === 'development') {
+    if (stack && config.NODE_ENV === 'development') {
       response.stack = stack;
     }
 

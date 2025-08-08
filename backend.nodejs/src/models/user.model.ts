@@ -2,14 +2,19 @@ import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcryptjs';
 import { IUser } from '../types/user.types';
 import { config } from '../configs/config';
+import { v4 as uuidv4 } from 'uuid';
 
 const userSchema = new Schema<IUser>(
   {
+    id: {
+      type: String,
+      default: uuidv4
+    },
     fullname: {
       type: String,
       required: [true, 'Full name is required'],
       trim: true,
-      maxlength: [50, 'Full name cannot exceed 50 characters'],
+      maxlength: [100, 'Full name cannot exceed 100 characters'],
     },
     email: {
       type: String,
@@ -17,6 +22,7 @@ const userSchema = new Schema<IUser>(
       unique: true,
       lowercase: true,
       trim: true,
+      maxlength: [320, 'Email cannot exceed 320 characters'],
       match: [
         /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
         'Please enter a valid email',
@@ -26,12 +32,12 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: [true, 'Password is required'],
       minlength: [6, 'Password must be at least 6 characters'],
+      maxlength: [128, 'Password cannot exceed 128 characters'],
       select: false,
     },
     role: {
       type: String,
-      enum: ['CUSTOMER', 'DEV', 'STAFF', 'ADMIN'],
-      default: 'CUSTOMER',
+      enum: ['CUSTOMER', 'DEV', 'STAFF', 'ADMIN', 'SYSTEM_HANDLER']
     },
     isEnable: {
       type: Boolean,
@@ -47,7 +53,7 @@ const userSchema = new Schema<IUser>(
     },
   },
   {
-    timestamps: false,
+    timestamps: false
   }
 );
 
@@ -71,4 +77,4 @@ userSchema.methods.toJSON = function () {
   return user;
 };
 
-export const User = mongoose.model<IUser>('User', userSchema);
+export const UserRepository = mongoose.model<IUser>('User', userSchema);
