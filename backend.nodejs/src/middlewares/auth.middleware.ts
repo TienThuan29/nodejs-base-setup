@@ -10,6 +10,7 @@ export const authenticate = async (
 ): Promise<void> => {
       try {
             const authHeader = request.headers.authorization;
+            // console.log('Auth header:', authHeader);
             if (!authHeader || !authHeader.startsWith('Bearer ')) {
                   ResponseUtil.error(response, 'Access token required', 401);
                   return;
@@ -18,7 +19,7 @@ export const authenticate = async (
             const token = authHeader.substring(7);
             const decoded = await JwtUtil.verify(token);
 
-            const user = await UserRepository.findById(decoded.id);
+            const user = await UserRepository.findOne({ id: decoded.id });
             if (!user || !user.isEnable) {
                   ResponseUtil.error(response, 'User not found or inactive', 401);
                   return;

@@ -37,3 +37,13 @@ export interface AuthResponse {
   accessToken: string;
   refreshToken: string;
 }
+
+export type UserProfileResponse = {
+  fullname: string;
+  email: string;
+  password: string;
+  role: string;
+  isEnable: boolean;
+  createdDate: Date;
+  updatedDate: Date;
+}

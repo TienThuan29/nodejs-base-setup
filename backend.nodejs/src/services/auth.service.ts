@@ -1,17 +1,30 @@
+import { mapUserToUserProfileResponse } from "@/mappers/user.mapper";
 import { UserRepository } from "@/models/user.model";
 import {
       AuthResponse,
       LoginCredentials,
       RegisterData,
+      UserProfileResponse,
 } from "@/types/auth.types";
 import { JwtUtil } from "@/utils/jwt.util";
 
 export class AuthService {
 
+      public async getProfile(userId: string): Promise<UserProfileResponse> {
+            const user = await UserRepository.findOne({ id: userId });
+            if (!user || !user.isEnable) {
+                  throw new Error('User not found or inactive');
+            }
+            console.log('User found:', user);
+            const userProfile: UserProfileResponse = await mapUserToUserProfileResponse(user);
+            console.log('Mapped user profile:', userProfile);
+            return userProfile;
+      }
+
       public async refreshToken(refreshToken: string): Promise<{ accessToken: string }> {
             const decoded = await JwtUtil.verify(refreshToken);
 
-            const user = await UserRepository.findById(decoded.id);
+            const user = await UserRepository.findOne({id: decoded.id});
             if (!user || !user.isEnable) {
                   throw new Error('User not found or inactive');
             }

@@ -53,7 +53,11 @@ export class AuthController {
 
 
       async getProfile(request: AuthRequest, response: Response, next: NextFunction): Promise<void> {
-            ResponseUtil.success(response, request.user, 'Profile retrieved successfully');
+            if (!request.user || !request.user.id) {
+                  ResponseUtil.error(response, 'User not authenticated', 401);
+                  return;
+            }
+            ResponseUtil.success(response, await this.authService.getProfile(request.user.id), 'Profile retrieved successfully'); // can use request.user to get user ID, email
       }
       
 
@@ -71,8 +75,6 @@ export class AuthController {
                   }
             }
       }
-
-
 
 }
 
